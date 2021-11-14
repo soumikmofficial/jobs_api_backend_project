@@ -4,4 +4,12 @@
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
 }
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  background: pink;
+}
 /*# sourceMappingURL=style.css.map */

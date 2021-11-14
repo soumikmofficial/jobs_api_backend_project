@@ -1,10 +1,17 @@
 const express = require("express");
 const expressLayout = require("express-ejs-layouts");
 const errorHandler = require("./middlewares/errorHandler");
+const connectDB = require("./config/connect");
 
 const app = express();
 
 require("dotenv").config();
+
+process.on("uncaughtException", (err) => {
+  console.log(err.message);
+  console.log(`Shutting down server due to unhandled promise rejection.`);
+  process.exit(1);
+});
 
 // ............................style and layout............................
 app.use(express.static("./public"));
@@ -23,6 +30,17 @@ app.get("", (req, res, next) => {
 // ............................error handlers............................
 app.use(errorHandler);
 
+// ..................................server and database...........................
+connectDB();
+
 const port = process.env.PORT || 3000;
 
-app.listen(port, () => console.log(`server up on port ${port}`));
+const server = app.listen(port, () => console.log(`server up on port ${port}`));
+
+process.on("unhandledRejection", (err) => {
+  console.log(err.message);
+  console.log(`Shutting down server due to unhandled promise rejection.`);
+  server.close(() => {
+    process.exit(1);
+  });
+});
