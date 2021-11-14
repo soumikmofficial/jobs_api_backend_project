@@ -1,5 +1,6 @@
 const express = require("express");
 const expressLayout = require("express-ejs-layouts");
+const errorHandler = require("./middlewares/errorHandler");
 
 const app = express();
 
@@ -15,11 +16,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // ............................routes............................
-app.get("", (req, res) => {
+app.get("", (req, res, next) => {
   res.render("home");
 });
 
 // ............................error handlers............................
+app.use(errorHandler);
 
 const port = process.env.PORT || 3000;
 
