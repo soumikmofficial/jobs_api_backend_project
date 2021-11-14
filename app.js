@@ -2,6 +2,8 @@ const express = require("express");
 const expressLayout = require("express-ejs-layouts");
 const errorHandler = require("./middlewares/errorHandler");
 const connectDB = require("./config/connect");
+const userRouter = require("./routes/auth");
+const jobsRouter = require("./routes/jobs");
 
 const app = express();
 
@@ -23,9 +25,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // ............................routes............................
-app.get("", (req, res, next) => {
-  res.render("home");
-});
+app.use("/api/v1/auth", userRouter);
+app.use("/api/v1/jobs", jobsRouter);
 
 // ............................error handlers............................
 app.use(errorHandler);
