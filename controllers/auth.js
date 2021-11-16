@@ -21,12 +21,11 @@ const login = asyncWrapper(async (req, res) => {
   if (!user) {
     throw new UnauthorizedError("invalid credentials");
   }
-  const isPasswordMatch = await user.matchPassword(password);
-  if (!isPasswordMatch) {
+  const isMatch = await user.matchPassword(password);
+  if (!isMatch) {
     throw new UnauthorizedError("invalid credentials");
   }
   const token = user.createJWT();
   res.status(200).json({ success: true, name: user.name, token });
 });
-
 module.exports = { register, login };
