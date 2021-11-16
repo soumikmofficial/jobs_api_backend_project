@@ -2,8 +2,14 @@ const express = require("express");
 const expressLayout = require("express-ejs-layouts");
 const errorHandler = require("./middlewares/errorHandler");
 const connectDB = require("./config/connect");
+// .....routers.....
 const userRouter = require("./routes/auth");
 const jobsRouter = require("./routes/jobs");
+// .....security.....
+const rateLimit = require("express-rate-limit");
+const cors = require("cors");
+const helmet = require("helmet");
+const xss = require("xss-clean");
 
 const app = express();
 
@@ -14,6 +20,17 @@ process.on("uncaughtException", (err) => {
   console.log(`Shutting down server due to unhandled promise rejection.`);
   process.exit(1);
 });
+// ............................security middlewares............................
+app.set("trust proxy", 1);
+app.use(
+  rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+  })
+);
+app.use(helmet());
+app.use(cors());
+app.use(xss());
 
 // ............................style and layout............................
 app.use(express.static("./public"));

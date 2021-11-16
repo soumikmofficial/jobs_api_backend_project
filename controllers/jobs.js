@@ -20,7 +20,7 @@ const getSingleJob = asyncWrapper(async (req, res) => {
   // fetching
   const job = await Job.findOne({ _id: jobId, createdBy: userId });
   if (!job) {
-    throw new NotFoundError(`No job with an ID of ${jobId}`);
+    throw new NotFoundError(`No job matching this id/user`);
   }
   res.status(StatusCodes.OK).json({ success: true, job });
 });
@@ -43,7 +43,7 @@ const updateJob = asyncWrapper(async (req, res) => {
     { new: true, runValidators: true }
   );
   if (!job) {
-    throw new NotFoundError(`No job with an ID of ${jobId}`);
+    throw new NotFoundError(`No job matching this id/user`);
   }
   res.status(StatusCodes.CREATED).json({ success: true, job });
 });
@@ -57,7 +57,7 @@ const deleteJob = asyncWrapper(async (req, res) => {
 
   const job = await Job.findOneAndDelete({ _id: jobId, createdBy: userId });
   if (!job) {
-    throw new NotFoundError(`No job with an ID of ${jobId}`);
+    throw new NotFoundError(`No job matching this id/user`);
   }
   res.status(StatusCodes.OK).json({ job });
 });
