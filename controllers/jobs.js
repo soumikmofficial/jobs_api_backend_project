@@ -60,8 +60,6 @@ const deleteJob = asyncWrapper(async (req, res) => {
     throw new NotFoundError(`No job with an ID of ${jobId}`);
   }
   res.status(StatusCodes.OK).json({ job });
-
-  res.send("delete job");
 });
 
 // ..............................create job..................................
