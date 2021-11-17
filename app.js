@@ -1,9 +1,8 @@
 const express = require("express");
-const expressLayout = require("express-ejs-layouts");
 const errorHandler = require("./middlewares/errorHandler");
 const connectDB = require("./config/connect");
 // .....routers.....
-const userRouter = require("./routes/auth");
+const authRouter = require("./routes/auth");
 const jobsRouter = require("./routes/jobs");
 // .....security.....
 const rateLimit = require("express-rate-limit");
@@ -29,21 +28,40 @@ app.use(
   })
 );
 app.use(helmet());
+// app.use(
+//   helmet.contentSecurityPolicy({
+//     directives: {
+//       defaultSrc: ["'self'", "data:", "blob:"],
+
+//       fontSrc: ["'self'", "https:", "data:"],
+
+//       scriptSrc: ["'self'", "unsafe-inline"],
+
+//       scriptSrc: ["'self'", "https://*.cloudflare.com"],
+
+//       scriptSrcElem: ["'self'", "https:", "https://*.cloudflare.com"],
+
+//       styleSrc: ["'self'", "https:", "unsafe-inline"],
+
+//       connectSrc: ["'self'", "data", "https://*.cloudflare.com"],
+//     },
+//   })
+// );
 app.use(cors());
 app.use(xss());
 
 // ............................style and layout............................
 app.use(express.static("./public"));
-app.set("view engine", "ejs");
-app.use(expressLayout);
 
 // ............................body parsers............................
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // ............................routes............................
-app.use("/api/v1/auth", userRouter);
+app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/jobs", jobsRouter);
+
+app.get("/", (req, res) => res.render("login"));
 
 // ............................error handlers............................
 app.use(errorHandler);
