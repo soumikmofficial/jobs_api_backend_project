@@ -1,14 +1,15 @@
 const express = require("express");
-const errorHandler = require("./middlewares/errorHandler");
-const connectDB = require("./config/connect");
+// .....security.....
+const xss = require("xss-clean");
+const cors = require("cors");
+const rateLimit = require("express-rate-limit");
+const helmet = require("helmet");
 // .....routers.....
 const authRouter = require("./routes/auth");
 const jobsRouter = require("./routes/jobs");
-// .....security.....
-const rateLimit = require("express-rate-limit");
-const cors = require("cors");
-const helmet = require("helmet");
-const xss = require("xss-clean");
+// other imports
+const errorHandler = require("./middlewares/errorHandler");
+const connectDB = require("./config/connect");
 
 const app = express();
 
@@ -28,25 +29,6 @@ app.use(
   })
 );
 app.use(helmet());
-// app.use(
-//   helmet.contentSecurityPolicy({
-//     directives: {
-//       defaultSrc: ["'self'", "data:", "blob:"],
-
-//       fontSrc: ["'self'", "https:", "data:"],
-
-//       scriptSrc: ["'self'", "unsafe-inline"],
-
-//       scriptSrc: ["'self'", "https://*.cloudflare.com"],
-
-//       scriptSrcElem: ["'self'", "https:", "https://*.cloudflare.com"],
-
-//       styleSrc: ["'self'", "https:", "unsafe-inline"],
-
-//       connectSrc: ["'self'", "data", "https://*.cloudflare.com"],
-//     },
-//   })
-// );
 app.use(cors());
 app.use(xss());
 
@@ -57,11 +39,11 @@ app.use(express.static("./public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// ............................routes............................
+// ............................routes........................h2....
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/jobs", jobsRouter);
 
-app.get("/", (req, res) => res.render("login"));
+app.get("/", (req, res) => res.send("<h2>The home page<h2/>"));
 
 // ............................error handlers............................
 app.use(errorHandler);
