@@ -4,3 +4,4 @@
 - Only Backend. No frontend.
 - For fetching info, token must be manually added to header
 - Additional security packages
+- Customized and detailed error handling

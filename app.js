@@ -17,7 +17,7 @@ require("dotenv").config();
 
 process.on("uncaughtException", (err) => {
   console.log(err.message);
-  console.log(`Shutting down server due to unhandled promise rejection.`);
+  console.log(`Shutting down server due to uncaught exception rejection.`);
   process.exit(1);
 });
 // ............................security middlewares............................
